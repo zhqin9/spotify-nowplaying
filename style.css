@@ -34,19 +34,19 @@ body {
   box-shadow: 0 4px 16px rgba(29, 185, 84, 0.2);
 }
 .playlist-header img {
-  width: 80px;
-  height: 80px;
+  width: 100px;
+  height: 100px;
   border-radius: 8px;
   object-fit: cover;
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 .playlist-info h2 {
-  font-size: 1rem;
+  font-size: 1.1rem;
   margin-bottom: 0.25rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 260px;
+  max-width: 280px;
 }
 .playlist-info p {
   font-size: 0.875rem;
@@ -58,7 +58,7 @@ body {
   backdrop-filter: blur(10px);
   border-radius: 16px;
   padding: 1.5rem;
-  margin-top: 0.5rem;
+  margin-top: 1rem;
 }
 .album-art {
   width: 100%;
@@ -76,7 +76,8 @@ body {
 #status-bar {
   position: fixed;
   bottom: 1rem;
-  right: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
   width: 48px;
   height: 48px;
   display: flex;
@@ -86,16 +87,13 @@ body {
   backdrop-filter: blur(8px);
   border-radius: 999px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  z-index: 10;
 }
 
 .status-icon {
-  width: 24px;
-  height: 24px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.7rem;
 }
 .status-icon.playing {
   background: #1db954; /* 绿色 */
