@@ -9,7 +9,8 @@ body {
   flex-direction: column;
 }
 .container {
-  max-width: 480px;
+  max-width: 90vw;
+  width: 100%;
   margin: 0 auto;
   text-align: center;
   flex: 1;
@@ -21,11 +22,11 @@ body {
   color: inherit;
   display: flex;
   align-items: center;
-  gap: 1.25rem;
-  margin-bottom: 1.5rem;
+  gap: 1rem;
+  margin-bottom: 1rem;
   background: rgba(255,255,255,0.06);
   border-radius: 12px;
-  padding: 1rem;
+  padding: 0.75rem;
   text-align: left;
   transition: transform 0.1s ease, box-shadow 0.1s ease;
 }
@@ -34,19 +35,18 @@ body {
   box-shadow: 0 4px 16px rgba(29, 185, 84, 0.2);
 }
 .playlist-header img {
-  width: 120px;
-  height: 120px;
+  width: 80px;
+  height: 80px;
   border-radius: 8px;
   object-fit: cover;
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 .playlist-info h2 {
-  font-size: 1.2rem;
+  font-size: 1rem;
   margin-bottom: 0.25rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 300px;
 }
 .playlist-info p {
   font-size: 0.875rem;
@@ -57,7 +57,7 @@ body {
   background: rgba(255,255,255,0.08);
   backdrop-filter: blur(10px);
   border-radius: 16px;
-  padding: 2rem;
+  padding: 1.5rem;
   margin-top: 0.5rem;
 }
 .album-art {
@@ -69,7 +69,7 @@ body {
   box-shadow: 0 8px 24px rgba(0,0,0,0.3);
 }
 .album-art img { width: 100%; height: 100%; object-fit: cover; }
-.info h2 { font-size: 1.5rem; margin-bottom: 0.25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.info h2 { font-size: 1.25rem; margin-bottom: 0.25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .info p { color: #b3b3b3; margin-bottom: 0.5rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .error { color: #ff5555; margin-top: 1rem; }
 
@@ -100,4 +100,21 @@ body {
 }
 .status-icon.paused {
   background: #bbb;
+}
+
+/* 小屏幕调整 */
+@media (max-width: 480px) {
+  .container { max-width: 100%; }
+  .playlist-header { gap: 0.75rem; padding: 0.5rem; }
+  .playlist-header img { width: 64px; height: 64px; }
+  .playlist-info h2 { font-size: 0.9rem; }
+  .player { padding: 1rem; }
+  .info h2 { font-size: 1.1rem; }
+}
+@media (min-width: 768px) {
+  .container { max-width: 480px; }
+  .playlist-header img { width: 100px; height: 100px; }
+  .playlist-info h2 { font-size: 1.2rem; }
+  .player { padding: 2rem; }
+  .info h2 { font-size: 1.5rem; }
 }
