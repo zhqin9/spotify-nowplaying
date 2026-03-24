@@ -1,49 +1,55 @@
-# Now Playing (Last.fm 版本)
+# Now Playing (Last.fm + 歌单预览)
 
-实时显示当前播放的歌曲信息（无需 Spotify Premium）。
+实时显示当前播放的歌曲信息，并展示关联的 Spotify 歌单。
 
-## 架构
+## 特性
 
-- **前端**：纯静态页面（index.html + style.css + script.js）
-- **数据源**：Last.fm API (`user.getRecentTracks`)
-- **托管**：Cloudflare Pages 或任意静态托管
+- 使用 Last.fm API 获取当前播放（免费账户）
+- 通过 Spotify oEmbed 显示歌单封面、标题、作者（静态生成）
+- 点击歌单头部跳转到 Spotify 歌单页
+- 预注入 Open Graph/Twitter meta 标签，利于分享和抓取
 
 ## 配置
 
-1. 获取 Last.fm API Key：
-   - 访问 https://www.last.fm/api/account/create
-   - 填写表单，提交后会收到 API Key
-
-2. 修改 `script.js` 中的配置：
+1. 在 `build.js` 顶部设置你的歌单 ID：
 ```javascript
-const LASTFM_USER = '你的Last.fm用户名';
-const LASTFM_API_KEY = '你的API Key';
+const PLAYLIST_ID = '你的歌单ID';
 ```
 
-3. 部署到 Pages（无需 Functions，无需环境变量）
+2. 在 `script.js` 顶部同步配置（用于前端显示）：
+```javascript
+const LASTFM_USER = '你的Last.fm用户名';
+const LASTFM_API_KEY = '你的Last.fm API Key';
+const PLAYLIST_ID = '你的歌单ID';
+```
 
-## 工作原理
+## 构建与部署
 
-- 前端每 10 秒轮询 Last.fm API
-- 获取最近一条 scrobble，判断 `@attr.nowplaying` 是否为 true
-- 显示歌曲名、艺术家、专辑、封面
-- 如果当前没有播放，显示“当前未播放”
+Cloudflare Pages 构建设置：
 
-## 注意事项
+- **Build command**: `node build.js`
+- **Build output directory**: `/`
 
-- 延迟约 10–30 秒（取决于 Last.fm 同步）
-- 需要在 Spotify 设置中启用“Scrobbling to Last.fm”
-- 封面来自 Last.fm 图片（可能与 Spotify 不一致）
-- 不需要 Spotify Premium，免费账户可用
+构建脚本 `build.js` 会：
+1. 请求 Spotify oEmbed API 获取歌单元数据
+2. 读取 `index.template.html`
+3. 替换占位符，生成最终的 `index.html`
 
 ## 文件结构
 
 ```
 /
-├── index.html
-├── style.css
+├── build.js          # 构建脚本
+├── index.template.html
 ├── script.js
+├── style.css
+├── .gitignore
 └── README.md
 ```
 
-无需后端，无需 KV，无需构建步骤。Pages 直接部署即可。
+## 注意事项
+
+- 构建过程需要访问 `open.spotify.com`（无鉴权）
+- 页面的 `<title>`、OG 标签在构建时确定，不会随播放变化
+- 当前播放内容由前端轮询 Last.fm 更新（延迟约 10–30 秒）
+- 需要启用 Spotify → Last.fm scrobbling
