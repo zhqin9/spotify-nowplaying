@@ -1,5 +1,6 @@
 const LASTFM_USER = 'opentree';
 const LASTFM_API_KEY = '95db05848ac514f31444587178d7bfa3';
+const PLAYLIST_ID = '44Xq0ZjwweqahmogY3gM5M';
 const POLL_MS = 10000;
 
 const statusEl = document.getElementById('status');
@@ -11,7 +12,32 @@ const artistName = document.getElementById('artist-name');
 const albumName = document.getElementById('album-name');
 const nowPlayingEl = document.getElementById('now-playing-indicator');
 
+const playlistCoverEl = document.getElementById('playlist-cover');
+const playlistTitleEl = document.getElementById('playlist-title');
+const playlistAuthorEl = document.getElementById('playlist-author');
+
 let pollInterval = null;
+
+async function fetchPlaylistInfo() {
+  try {
+    const url = `https://open.spotify.com/oembed?url=spotify:playlist:${PLAYLIST_ID}&format=json`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`Failed to load playlist info (${res.status})`);
+    const data = await res.json();
+    document.title = data.title + ' - Now Playing';
+    playlistTitleEl.textContent = data.title;
+    playlistAuthorEl.textContent = data.author_name;
+    if (data.thumbnail_url) {
+      playlistCoverEl.src = data.thumbnail_url;
+      playlistCoverEl.alt = `${data.title} cover`;
+    }
+  } catch (e) {
+    console.warn('Playlist info fetch failed:', e);
+    document.title = 'Now Playing';
+    playlistTitleEl.textContent = '歌单';
+    playlistAuthorEl.textContent = 'Spotify';
+  }
+}
 
 function showError(msg) {
   statusEl.classList.add('hidden');
@@ -72,4 +98,6 @@ function startPolling() {
   pollInterval = setInterval(fetchNowPlaying, POLL_MS);
 }
 
-window.addEventListener('load', startPolling);
+window.addEventListener('load', () => {
+  fetchPlaylistInfo().then(startPolling);
+});

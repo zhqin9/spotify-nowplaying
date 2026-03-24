@@ -3,12 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Now Playing - Last.fm</title>
+  <title>Now Playing</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
-    <h1>🎵 正在播放</h1>
+    <header class="playlist-header">
+      <img id="playlist-cover" src="" alt="Playlist cover">
+      <div class="playlist-info">
+        <h2 id="playlist-title">加载歌单信息...</h2>
+        <p id="playlist-author">—</p>
+      </div>
+    </header>
+
+    <h1 class="section-title">🎵 正在播放</h1>
+
     <div id="status">加载中...</div>
     <div id="player" class="player hidden">
       <div class="album-art">
