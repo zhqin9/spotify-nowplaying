@@ -1,6 +1,7 @@
 const LASTFM_USER = 'opentree';
 const LASTFM_API_KEY = '95db05848ac514f31444587178d7bfa3';
 const PLAYLIST_ID = '44Xq0ZjwweqahmogY3gM5M';
+const PLAYLIST_LINK_BASE = 'https://open.spotify.com/playlist/';
 const POLL_MS = 10000;
 
 const statusEl = document.getElementById('status');
@@ -12,6 +13,7 @@ const artistName = document.getElementById('artist-name');
 const albumName = document.getElementById('album-name');
 const nowPlayingEl = document.getElementById('now-playing-indicator');
 
+const playlistLinkEl = document.getElementById('playlist-link');
 const playlistCoverEl = document.getElementById('playlist-cover');
 const playlistTitleEl = document.getElementById('playlist-title');
 const playlistAuthorEl = document.getElementById('playlist-author');
@@ -31,11 +33,14 @@ async function fetchPlaylistInfo() {
       playlistCoverEl.src = data.thumbnail_url;
       playlistCoverEl.alt = `${data.title} cover`;
     }
+    // 动态设置跳转链接
+    playlistLinkEl.href = PLAYLIST_LINK_BASE + PLAYLIST_ID;
   } catch (e) {
     console.warn('Playlist info fetch failed:', e);
     document.title = 'Now Playing';
     playlistTitleEl.textContent = '歌单';
     playlistAuthorEl.textContent = 'Spotify';
+    playlistLinkEl.href = PLAYLIST_LINK_BASE + PLAYLIST_ID;
   }
 }
 
