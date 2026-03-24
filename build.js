@@ -19,7 +19,13 @@ function fetchPlaylistInfo() {
           return reject(new Error(`HTTP ${res.statusCode}: ${data}`));
         }
         try {
-          resolve(JSON.parse(data));
+          const json = JSON.parse(data);
+          console.log('Fetched info:', {
+            title: json.title,
+            author: json.author_name,
+            thumbnail: json.thumbnail_url,
+          });
+          resolve(json);
         } catch (e) {
           reject(e);
         }
@@ -30,7 +36,7 @@ function fetchPlaylistInfo() {
 
 // 替换模板占位符
 function renderTemplate(template, info) {
-  return template
+  const result = template
     .replace(/\{\{OG_TITLE\}\}/g, info.title)
     .replace(/\{\{OG_DESCRIPTION\}\}/g, `Listen to ${info.title} by ${info.author_name} on Spotify.`)
     .replace(/\{\{OG_IMAGE\}\}/g, info.thumbnail_url)
@@ -38,6 +44,8 @@ function renderTemplate(template, info) {
     .replace(/\{\{TITLE\}\}/g, info.title)
     .replace(/\{\{AUTHOR\}\}/g, info.author_name)
     .replace(/\{\{COVER\}\}/g, info.thumbnail_url);
+  console.log('Replaced COVER with:', info.thumbnail_url);
+  return result;
 }
 
 // 主流程
