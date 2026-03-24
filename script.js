@@ -11,12 +11,13 @@ const albumCover = document.getElementById('album-cover');
 const trackName = document.getElementById('track-name');
 const artistName = document.getElementById('artist-name');
 const albumName = document.getElementById('album-name');
-const trackStatusEl = document.getElementById('track-status');
 
 const playlistLinkEl = document.getElementById('playlist-link');
 const playlistCoverEl = document.getElementById('playlist-cover');
 const playlistTitleEl = document.getElementById('playlist-title');
 const playlistAuthorEl = document.getElementById('playlist-author');
+
+const statusIconEl = document.getElementById('status-icon');
 
 let pollInterval = null;
 
@@ -48,6 +49,7 @@ function showError(msg) {
   playerEl.classList.add('hidden');
   errorEl.textContent = msg;
   errorEl.classList.remove('hidden');
+  statusIconEl.className = 'status-icon paused';
 }
 
 function showPlayer() {
@@ -61,6 +63,7 @@ function updateUI(track) {
     statusEl.textContent = '当前未播放';
     playerEl.classList.add('hidden');
     statusEl.classList.remove('hidden');
+    statusIconEl.className = 'status-icon paused';
     return;
   }
 
@@ -78,10 +81,8 @@ function updateUI(track) {
     albumCover.src = '';
   }
 
-  // 显示播放状态
   const isNowPlaying = track['@attr']?.nowplaying === 'true';
-  trackStatusEl.textContent = isNowPlaying ? '正在播放 ▶️' : '已暂停 ⏸️';
-  trackStatusEl.style.color = isNowPlaying ? '#1db954' : '#bbb';
+  statusIconEl.className = isNowPlaying ? 'status-icon playing' : 'status-icon paused';
 }
 
 async function fetchNowPlaying() {
