@@ -1,102 +1,75 @@
-const API_BASE = '/api';
+const LASTFM_USER = 'opentree';
+const LASTFM_API_KEY = '95db05848ac514f31444587178d7bfa3';
+const POLL_MS = 10000;
 
-const authSection = document.getElementById('auth-section');
-const playerSection = document.getElementById('player-section');
-const errorSection = document.getElementById('error-section');
-
-const loginBtn = document.getElementById('login-btn');
+const statusEl = document.getElementById('status');
+const playerEl = document.getElementById('player');
+const errorEl = document.getElementById('error');
 const albumCover = document.getElementById('album-cover');
 const trackName = document.getElementById('track-name');
 const artistName = document.getElementById('artist-name');
-const progressFill = document.getElementById('progress-fill');
-const currentTimeEl = document.getElementById('current-time');
-const totalTimeEl = document.getElementById('total-time');
-const statusEl = document.getElementById('status');
+const albumName = document.getElementById('album-name');
+const nowPlayingEl = document.getElementById('now-playing-indicator');
 
 let pollInterval = null;
-const POLL_MS = 2000;
 
-function formatTime(ms) {
-  if (!ms) return '0:00';
-  const s = Math.floor(ms / 1000);
-  const m = Math.floor(s / 60);
-  const sec = s % 60;
-  return `${m}:${sec.toString().padStart(2, '0')}`;
-}
-
-function showError() {
-  authSection.classList.add('hidden');
-  playerSection.classList.add('hidden');
-  errorSection.classList.remove('hidden');
+function showError(msg) {
+  statusEl.classList.add('hidden');
+  playerEl.classList.add('hidden');
+  errorEl.textContent = msg;
+  errorEl.classList.remove('hidden');
 }
 
 function showPlayer() {
-  authSection.classList.add('hidden');
-  errorSection.classList.add('hidden');
-  playerSection.classList.remove('hidden');
+  statusEl.classList.add('hidden');
+  errorEl.classList.add('hidden');
+  playerEl.classList.remove('hidden');
 }
 
-function updateUI(data) {
-  if (!data || !data.item) {
-    statusEl.textContent = '未播放';
-    progressFill.style.width = '0%';
-    trackName.textContent = '—';
-    artistName.textContent = '—';
-    albumCover.src = '';
+function updateUI(track) {
+  if (!track) {
+    statusEl.textContent = '当前未播放';
+    playerEl.classList.add('hidden');
+    statusEl.classList.remove('hidden');
     return;
   }
 
-  const item = data.item;
-  const isPlaying = data.is_playing;
-  const progress = data.progress_ms;
-  const duration = item.duration_ms;
+  showPlayer();
+  trackName.textContent = track.name;
+  artistName.textContent = track.artist['#text'];
+  albumName.textContent = track.album['#text'];
 
-  trackName.textContent = item.name;
-  artistName.textContent = item.artists.map(a => a.name).join(', ');
-  albumCover.src = item.album.images[0]?.url;
-  albumCover.alt = `${item.album.name} cover`;
+  const images = track.image || [];
+  const img = images.find(i => i.size === 'large' || i.size === 'extralarge') || images[0];
+  if (img) {
+    albumCover.src = img['#text'];
+    albumCover.alt = `${track.album['#text']} cover`;
+  } else {
+    albumCover.src = '';
+  }
 
-  const pct = duration > 0 ? (progress / duration) * 100 : 0;
-  progressFill.style.width = `${pct}%`;
-
-  currentTimeEl.textContent = formatTime(progress);
-  totalTimeEl.textContent = formatTime(duration);
-
-  statusEl.textContent = isPlaying ? '正在播放 ▶️' : '已暂停 ⏸️';
+  nowPlayingEl.style.display = track['@attr']?.nowplaying === 'true' ? 'block' : 'none';
 }
 
 async function fetchNowPlaying() {
   try {
-    const res = await fetch(`${API_BASE}/now-playing`);
-    if (res.status === 204) {
-      updateUI(null);
-      return;
-    }
+    const url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${LASTFM_USER}&api_key=${LASTFM_API_KEY}&format=json&limit=1`;
+    const res = await fetch(url);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
-    updateUI(data);
+    const track = data.recenttracks?.track?.[0];
+    updateUI(track);
   } catch (e) {
     console.error('Poll error:', e);
     if (pollInterval) clearInterval(pollInterval);
-    showError();
+    showError(e.message);
   }
 }
 
 function startPolling() {
   if (pollInterval) clearInterval(pollInterval);
-  fetchNowPlaying(); // immediate
+  fetchNowPlaying();
   pollInterval = setInterval(fetchNowPlaying, POLL_MS);
 }
 
-loginBtn.addEventListener('click', () => {
-  window.location.href = `${API_BASE}/login`;
-});
-
-(async () => {
-  const hasToken = await fetch(`${API_BASE}/has-token`).then(r => r.json()).then(d => d.hasToken).catch(() => false);
-  if (hasToken) {
-    authSection.classList.add('hidden');
-    showPlayer();
-    startPolling();
-  }
-})();
+window.addEventListener('load', startPolling);

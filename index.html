@@ -3,44 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Spotify Now Playing</title>
+  <title>Now Playing - Last.fm</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
     <h1>🎵 正在播放</h1>
-
-    <div id="auth-section">
-      <p>需要连接 Spotify 账户以获取播放状态。</p>
-      <button id="login-btn">登录 Spotify</button>
-    </div>
-
-    <div id="player-section" class="hidden">
+    <div id="status">加载中...</div>
+    <div id="player" class="player hidden">
       <div class="album-art">
         <img id="album-cover" src="" alt="Album cover">
       </div>
       <div class="info">
         <h2 id="track-name">—</h2>
         <p id="artist-name">—</p>
-        <div class="progress-container">
-          <div class="progress-bar">
-            <div id="progress-fill"></div>
-          </div>
-          <div class="time-labels">
-            <span id="current-time">0:00</span>
-            <span id="total-time">0:00</span>
-          </div>
-        </div>
-        <p id="status" class="status"></p>
+        <p id="album-name">—</p>
+        <p id="now-playing-indicator" class="nowplaying">正在播放 ▶️</p>
       </div>
     </div>
-
-    <div id="error-section" class="hidden">
-      <p class="error">加载失败，请重试。</p>
-      <button onclick="location.reload()">刷新</button>
-    </div>
+    <div id="error" class="error hidden"></div>
   </div>
-
   <script src="script.js"></script>
 </body>
 </html>

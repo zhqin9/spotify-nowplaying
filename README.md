@@ -1,47 +1,40 @@
-# Spotify Now Playing (Cloudflare Pages + Functions)
+# Now Playing (Last.fm 版本)
 
-实时显示 Spotify 正在播放的歌曲、封面、进度等信息。
+实时显示当前播放的歌曲信息（无需 Spotify Premium）。
 
 ## 架构
 
 - **前端**：纯静态页面（index.html + style.css + script.js）
-- **后端**：Cloudflare Pages Functions（/api/* 路由）
-- **存储**：Cloudflare KV（保存 token）
+- **数据源**：Last.fm API (`user.getRecentTracks`)
+- **托管**：Cloudflare Pages 或任意静态托管
 
-## 部署步骤
+## 配置
 
-### 1. Spotify Developer 设置
+1. 获取 Last.fm API Key：
+   - 访问 https://www.last.fm/api/account/create
+   - 填写表单，提交后会收到 API Key
 
-1. 访问 [Spotify Developer Dashboard](https://developer.spotify.com/dashboard)
-2. 登录并点击 "Create App"
-   - App name: 任意（如 "Now Playing Demo"）
-   - Redirect URI: `https://你的域名.pages.dev/api/callback`
-   - 勾选 `Web API`
-3. 创建后记录 `Client ID` 和 `Client Secret`
+2. 修改 `script.js` 中的配置：
+```javascript
+const LASTFM_USER = '你的Last.fm用户名';
+const LASTFM_API_KEY = '你的API Key';
+```
 
-### 2. Cloudflare 设置
+3. 部署到 Pages（无需 Functions，无需环境变量）
 
-1. 登录 Cloudflare Dashboard → **Workers & Pages** → **KV** → 创建命名空间（如 `spotify-nowplaying-kv`）
-2. 记录命名空间 ID
+## 工作原理
 
-### 3. 配置 Pages 项目
+- 前端每 10 秒轮询 Last.fm API
+- 获取最近一条 scrobble，判断 `@attr.nowplaying` 是否为 true
+- 显示歌曲名、艺术家、专辑、封面
+- 如果当前没有播放，显示“当前未播放”
 
-1. 在 Cloudflare 创建新的 Pages 项目，连接到你的 Git 仓库
-2. 构建配置：
-   - 构建命令：`echo "无构建步骤"`
-   - 输出目录：`/` (根目录)
-3. 环境变量（在 Pages 设置 → Environment variables）：
-   - `SPOTIFY_CLIENT_ID` → 你的 Client ID
-   - `SPOTIFY_CLIENT_SECRET` → 你的 Client Secret
-   - 可选：`KV_NAMESPACE` → 你的 KV 命名空间 ID（如果绑定名为 `KV_NAMESPACE` 则自动注入）
-4. 绑定 KV：
-   - 在 Pages 的 **Variables** → **KV** 中添加
-   - 变量名：`KV_NAMESPACE`
-   - 选择刚才创建的 KV 命名空间
+## 注意事项
 
-### 4. 部署
-
-Push 代码后 Pages 自动部署。访问你的 pages.dev 域名即可使用。
+- 延迟约 10–30 秒（取决于 Last.fm 同步）
+- 需要在 Spotify 设置中启用“Scrobbling to Last.fm”
+- 封面来自 Last.fm 图片（可能与 Spotify 不一致）
+- 不需要 Spotify Premium，免费账户可用
 
 ## 文件结构
 
@@ -50,37 +43,7 @@ Push 代码后 Pages 自动部署。访问你的 pages.dev 域名即可使用。
 ├── index.html
 ├── style.css
 ├── script.js
-├── functions/
-│   └── api/
-│       └── [[path]].js   # 处理所有 /api/* 请求
-├── wrangler.toml          # 本地开发配置（可选）
 └── README.md
 ```
 
-## OAuth 流程
-
-1. 用户点击"登录 Spotify" → 跳转 Spotify 授权页
-2. 授权后回调到 `/api/callback`，交换 access_token/refresh_token
-3. token 存入 KV，前端开始轮询 `/api/now-playing`
-4. Access token 过期前自动刷新
-
-## 注意事项
-
-- 需在 Spotify Dashboard 设置正确的 Redirect URI
-- 首次登录后可勾选“记住我”延长授权时长
-- 轮询间隔 2 秒；可调整 `script.js` 中的 `POLL_MS`
-- 歌词未提供（Spotify API 不公开），需要可集成第三方服务
-
-## 本地开发（可选）
-
-安装 [Wrangler](https://developers.cloudflare.com/workers/wrangler/)，然后：
-
-```bash
-npx wrangler pages dev . --local
-```
-
-在环境文件中设置 `SPOTIFY_CLIENT_ID`、`SPOTIFY_CLIENT_SECRET`，并绑定 KV 命名空间。
-
----
-
-遇到问题？检查 Cloudflare Pages 日志和 KV 绑定是否正确。
+无需后端，无需 KV，无需构建步骤。Pages 直接部署即可。
