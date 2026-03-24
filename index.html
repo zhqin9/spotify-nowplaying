@@ -3,30 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{TITLE}} - Now Playing</title>
+  <title>{{{TITLE}}} - Now Playing</title>
 
   <!-- Open Graph -->
-  <meta property="og:title" content="{{OG_TITLE}}">
-  <meta property="og:description" content="{{OG_DESCRIPTION}}">
-  <meta property="og:image" content="{{OG_IMAGE}}">
-  <meta property="og:url" content="{{OG_URL}}">
+  <meta property="og:title" content="{{{OG_TITLE}}}">
+  <meta property="og:description" content="{{{OG_DESCRIPTION}}}">
+  <meta property="og:image" content="{{{OG_IMAGE}}}">
+  <meta property="og:url" content="{{{OG_URL}}}">
   <meta property="og:type" content="music.playlist">
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="{{OG_TITLE}}">
-  <meta name="twitter:description" content="{{OG_DESCRIPTION}}">
-  <meta name="twitter:image" content="{{OG_IMAGE}}">
+  <meta name="twitter:title" content="{{{OG_TITLE}}}">
+  <meta name="twitter:description" content="{{{OG_DESCRIPTION}}}">
+  <meta name="twitter:image" content="{{{OG_IMAGE}}}">
 
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
-    <a id="playlist-link" href="{{OG_URL}}" target="_blank" rel="noopener noreferrer" class="playlist-header">
-      <img id="playlist-cover" src="{{COVER}}" alt="Playlist cover">
+    <a id="playlist-link" href="{{{OG_URL}}}" target="_blank" rel="noopener noreferrer" class="playlist-header">
+      <img id="playlist-cover" src="{{{COVER}}}" alt="Playlist cover">
       <div class="playlist-info">
-        <h2 id="playlist-title">{{TITLE}}</h2>
-        <p id="playlist-author">{{AUTHOR}}</p>
+        <h2 id="playlist-title">{{{TITLE}}}</h2>
+        <p id="playlist-author">{{{AUTHOR}}}</p>
       </div>
     </a>
 
