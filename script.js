@@ -11,6 +11,7 @@ const albumCover = document.getElementById('album-cover');
 const trackName = document.getElementById('track-name');
 const artistName = document.getElementById('artist-name');
 const albumName = document.getElementById('album-name');
+const trackStatusEl = document.getElementById('track-status');
 
 const playlistLinkEl = document.getElementById('playlist-link');
 const playlistCoverEl = document.getElementById('playlist-cover');
@@ -32,7 +33,6 @@ async function fetchPlaylistInfo() {
       playlistCoverEl.src = data.thumbnail_url;
       playlistCoverEl.alt = `${data.title} cover`;
     }
-    // 动态设置跳转链接
     playlistLinkEl.href = PLAYLIST_LINK_BASE + PLAYLIST_ID;
   } catch (e) {
     console.warn('Playlist info fetch failed:', e);
@@ -77,6 +77,11 @@ function updateUI(track) {
   } else {
     albumCover.src = '';
   }
+
+  // 显示播放状态
+  const isNowPlaying = track['@attr']?.nowplaying === 'true';
+  trackStatusEl.textContent = isNowPlaying ? '正在播放 ▶️' : '已暂停 ⏸️';
+  trackStatusEl.style.color = isNowPlaying ? '#1db954' : '#bbb';
 }
 
 async function fetchNowPlaying() {
