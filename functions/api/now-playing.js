@@ -25,7 +25,10 @@ async function refreshAccessToken(env, refreshToken) {
     }),
   });
 
-  if (!resp.ok) throw new Error(`Token refresh failed: ${resp.status}`);
+  if (!resp.ok) {
+    const txt = await resp.text();
+    throw new Error(`Token refresh failed: ${resp.status} - ${txt}`);
+  }
 
   const data = await resp.json();
   const now = Math.floor(Date.now() / 1000);
@@ -61,9 +64,10 @@ async function fetchSpotifyPlayer(env) {
   if (!resp.ok) {
     if (resp.status === 401) {
       await env.KV_NAMESPACE.delete(KV_TOKEN_KEY);
-      throw new Error('Unauthorized');
+      throw new Error('Unauthorized (invalid token)');
     }
-    throw new Error(`Spotify API error: ${resp.status}`);
+    const txt = await resp.text();
+    throw new Error(`Spotify API error: ${resp.status} - ${txt}`);
   }
 
   return resp.json();
@@ -75,6 +79,10 @@ export async function onRequestGet(context) {
     const data = await fetchSpotifyPlayer(env);
     return Response.json(data || {});
   } catch (e) {
-    return Response.json({ error: e.message }, { status: 500 });
+    return Response.json({
+      error: e.message,
+      stack: e.stack || 'no stack',
+      name: e.name
+    }, { status: 500 });
   }
 }
