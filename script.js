@@ -11,7 +11,6 @@ const albumCover = document.getElementById('album-cover');
 const trackName = document.getElementById('track-name');
 const artistName = document.getElementById('artist-name');
 const albumName = document.getElementById('album-name');
-const nowPlayingEl = document.getElementById('now-playing-indicator');
 
 const playlistLinkEl = document.getElementById('playlist-link');
 const playlistCoverEl = document.getElementById('playlist-cover');
@@ -78,8 +77,6 @@ function updateUI(track) {
   } else {
     albumCover.src = '';
   }
-
-  nowPlayingEl.style.display = track['@attr']?.nowplaying === 'true' ? 'block' : 'none';
 }
 
 async function fetchNowPlaying() {
