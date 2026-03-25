@@ -214,8 +214,6 @@ function updateUI(track) {
       extractDominantColor(imgUrl).then(color => {
         if (color) applyGradientBackground(color);
       });
-      // 更新 favicon 为当前封面
-      setFavicon(imgUrl);
     }
     
     albumCover.src = imgUrl;
@@ -228,7 +226,6 @@ function updateUI(track) {
       extractDominantColor(fallbackUrl).then(color => {
         if (color) applyGradientBackground(color);
       });
-      setFavicon(fallbackUrl);
     }
     albumCover.src = fallbackUrl;
     albumCover.alt = `${track.album['#text']} cover (fallback)`;
