@@ -17,7 +17,8 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-  flex: 1; /* 占满剩余高度 */
+  flex: 1;
+  padding-bottom: 80px; /* 为底部固定状态栏预留空间 */
 }
 .hidden { display: none !important; }
 
