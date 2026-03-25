@@ -84,11 +84,11 @@ body {
   max-width: 90vw;
 }
 .album-art {
-  width: 300px;
-  height: 300px;
-  max-width: 90vw;
-  max-height: 90vw;
-  border-radius: 12px;  /* 恢复圆角 */
+  width: 90vw;
+  height: 90vw;
+  max-width: 300px;
+  max-height: 300px;
+  border-radius: 12px;
   overflow: hidden;
   margin-bottom: 1rem;
   box-shadow: 0 8px 24px rgba(0,0,0,0.3);
