@@ -73,12 +73,20 @@ function updateUI(track) {
   albumName.textContent = track.album['#text'];
 
   const images = track.image || [];
-  const img = images.find(i => i.size === 'large' || i.size === 'extralarge') || images[0];
+  // 按分辨率优先级选择：mega > extralarge > large > medium > small > 任意
+  const img = images.find(i => i.size === 'mega') ||
+              images.find(i => i.size === 'extralarge') ||
+              images.find(i => i.size === 'large') ||
+              images.find(i => i.size === 'medium') ||
+              images.find(i => i.size === 'small') ||
+              images[0];
   if (img) {
     albumCover.src = img['#text'];
     albumCover.alt = `${track.album['#text']} cover`;
   } else {
-    albumCover.src = '';
+    // fallback: 使用歌单封面
+    albumCover.src = playlistCoverEl.src;
+    albumCover.alt = `${track.album['#text']} cover (fallback)`;
   }
 
   const isNowPlaying = track['@attr']?.nowplaying === 'true';
