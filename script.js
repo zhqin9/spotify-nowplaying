@@ -81,8 +81,11 @@ function updateUI(track) {
               images.find(i => i.size === 'small') ||
               images[0];
   if (img) {
-    albumCover.src = img['#text'];
-    albumCover.alt = `${track.album['#text']} cover`;
+    let imgUrl = img['#text'];
+    // 强制替换尺寸为 999x999（高清）
+    imgUrl = imgUrl.replace(/\/\d+x\d+\//, '/999x999/');
+    albumCover.src = imgUrl;
+    albumCover.alt = `${track.album['#text']} cover (999x999)`;
   } else {
     // fallback: 使用歌单封面
     albumCover.src = playlistCoverEl.src;
