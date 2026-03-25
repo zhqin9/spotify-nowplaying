@@ -108,14 +108,14 @@ async function extractDominantColor(imgUrl) {
   });
 }
 
-// 根据主色生成渐变背景
+// 根据主色生成渐变背景（从上到下：上面浅色，下面深色）
 function applyGradientBackground({ r, g, b }) {
   // 生成暗色版本（降低亮度）
   const darkR = Math.floor(r * 0.2);
   const darkG = Math.floor(g * 0.2);
   const darkB = Math.floor(b * 0.2);
-  // 渐变：从暗色到主色
-  document.body.style.background = `linear-gradient(135deg, rgb(${darkR},${darkG},${darkB}) 0%, rgb(${r},${g},${b}) 100%)`;
+  // 渐变：从上到下，上面是主色（浅），下面是暗色（深）
+  document.body.style.background = `linear-gradient(180deg, rgb(${r},${g},${b}) 0%, rgb(${darkR},${darkG},${darkB}) 100%)`;
   document.body.style.transition = 'background 0.8s ease';
 }
 
