@@ -46,39 +46,47 @@ body {
   object-fit: cover;
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.spotify-logo {
+  width: 20px;
+  height: 20px;
+}
 .playlist-info h2 {
   font-size: 0.9rem;
   margin-bottom: 0.25rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  max-width: 200px;
 }
 .playlist-info p {
   font-size: 0.8rem;
   color: #b3b3b3;
 }
 
-/* 当前播放 - 恢复原始大尺寸 */
+/* 当前播放 - 去除背景和圆角，封面方形+阴影 */
 .player {
-  background: rgba(255,255,255,0.08);
-  backdrop-filter: blur(10px);
-  border-radius: 16px;
+  /* 移除背景和圆角，保持透明 */
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: auto; /* 垂直居中：上方自动 */
-  margin-bottom: auto; /* 垂直居中：下方自动 */
+  margin-top: auto;
+  margin-bottom: auto;
   width: fit-content;
   max-width: 90vw;
 }
 .album-art {
-  width: 300px;  /* 大尺寸封面 */
+  width: 300px;
   height: 300px;
-  border-radius: 12px;
+  border-radius: 0;  /* 取消圆角 */
   overflow: hidden;
   margin-bottom: 1rem;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3); /* 保留阴影 */
 }
 .album-art img { width: 100%; height: 100%; object-fit: cover; }
 .info h2 {
