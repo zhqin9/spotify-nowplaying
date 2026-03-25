@@ -85,13 +85,14 @@ async function extractDominantColor(imgUrl) {
           const min = Math.min(r, g, b);
           const sat = (max - min) / max;
           
-          // 判断是否是红色/红橙色（r 显著高于 g 和 b）
-          const isReddish = r > 120 && r > g * 1.3 && r > b * 1.2;
+          // 判断是否是红色谱系（正红、橙红、深红），要求 r 明显高于 g 和 b，且 r 本身足够高（鲜艳）
+          const isReddish = r > 150 && r > g * 1.5 && r > b * 1.4;
           
           if (isReddish && sat > 0.3) {
-            // 找到红色，记录其饱和度
-            if (sat > maxSat) {
-              maxSat = sat;
+            // 使用饱和度和红色强度加权评分，优先选 r 值高且饱和的
+            const score = sat * r;
+            if (score > maxSat) {
+              maxSat = score;
               bestR = r; bestG = g; bestB = b;
               hasRed = true;
             }
