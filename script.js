@@ -85,8 +85,8 @@ async function extractDominantColor(imgUrl) {
           const min = Math.min(r, g, b);
           const sat = (max - min) / max;
           
-          // 判断是否是红色/红橙色（r 显著高于 g 且 r > b）
-          const isReddish = r > 100 && r > g * 1.2 && r > b;
+          // 判断是否是红色/红橙色（r 显著高于 g 和 b）
+          const isReddish = r > 120 && r > g * 1.3 && r > b * 1.2;
           
           if (isReddish && sat > 0.3) {
             // 找到红色，记录其饱和度
@@ -108,8 +108,8 @@ async function extractDominantColor(imgUrl) {
             const min = Math.min(r, g, b);
             const sat = (max - min) / max;
             
-            // 避开黄色：黄色通常 r≈g > b，且 r 和 g 都很高
-            const isYellow = r > 150 && g > 150 && b < 100 && Math.abs(r - g) < 30;
+            // 避开黄色：r 和 g 都高且接近，b 明显低
+            const isYellow = r > 180 && g > 180 && b < 100 && Math.abs(r - g) < 40;
             
             if (!isYellow && sat > maxSat) {
               maxSat = sat;
