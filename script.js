@@ -77,11 +77,11 @@ async function extractDominantColor(imgUrl) {
         let maxSat = -1;
         let hasRed = false;
 
-        // 第一遍：找红色优先
+        // 第一遍：找红色优先（避开太亮/太暗）
         for (let i = 0; i < data.length; i += 4) {
           const r = data[i], g = data[i+1], b = data[i+2];
           const max = Math.max(r, g, b);
-          if (max < 40) continue;
+          if (max < 40 || max > 230) continue; // 过滤太暗和太亮（接近白）
           const min = Math.min(r, g, b);
           const sat = (max - min) / max;
           
@@ -104,7 +104,7 @@ async function extractDominantColor(imgUrl) {
           for (let i = 0; i < data.length; i += 4) {
             const r = data[i], g = data[i+1], b = data[i+2];
             const max = Math.max(r, g, b);
-            if (max < 40) continue;
+            if (max < 40 || max > 230) continue; // 过滤太暗和太亮（接近白）
             const min = Math.min(r, g, b);
             const sat = (max - min) / max;
             
