@@ -57,11 +57,11 @@ body {
   margin-left: auto; /* 推到最右边 */
   flex-shrink: 0;
 }
-.on-air-text {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #fff;
-  line-height: 30px; /* 与 Logo 高度一致，垂直居中 */
+.plus-icon {
+  width: 30px;
+  height: 30px;
+  fill: #fff;
+  animation: breathe 4s ease-in-out infinite; /* 与 Logo 同步 */
 }
 .spotify-logo {
   width: 30px;
