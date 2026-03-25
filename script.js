@@ -185,6 +185,8 @@ function updateUI(track) {
     let imgUrl = img['#text'];
     // 强制替换尺寸为 990x990（高清）
     imgUrl = imgUrl.replace(/\/\d+x\d+\//, '/990x990/');
+    // 去掉可能的查询参数（简化链接，避免某些平台拦截）
+    imgUrl = imgUrl.split('?')[0];
     
     // 检测是否为 Last.fm 默认占位图（没有专辑封面时返回）
     const isPlaceholder = imgUrl.includes('2a96cbd8b46e442fc41c2b86b821562f');
