@@ -165,6 +165,14 @@ function updateUI(track) {
   artistName.textContent = track.artist['#text'];
   albumName.textContent = track.album['#text'];
 
+  // 实时更新页面标题和 Open Graph 标签
+  const newTitle = `${track.name} - ${track.artist['#text']} | ${playlistTitleEl.textContent}`;
+  document.title = newTitle;
+  const ogTitle = document.querySelector('meta[property="og:title"]');
+  const ogDescription = document.querySelector('meta[property="og:description"]');
+  if (ogTitle) ogTitle.setAttribute('content', newTitle);
+  if (ogDescription) ogDescription.setAttribute('content', `正在播放：${track.name} - ${track.artist['#text']}`);
+
   const images = track.image || [];
   // 按分辨率优先级选择：mega > extralarge > large > medium > small > 任意
   const img = images.find(i => i.size === 'mega') ||
