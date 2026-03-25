@@ -57,7 +57,7 @@ body {
   margin-left: auto; /* 推到最右边 */
   flex-shrink: 0;
 }
-.circle-icon {
+.plus-icon {
   width: 30px;
   height: 30px;
   fill: #fff;
