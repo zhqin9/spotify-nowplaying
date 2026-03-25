@@ -86,8 +86,8 @@ body {
 .album-art {
   width: 90vw;
   height: 90vw;
-  max-width: 300px;
-  max-height: 300px;
+  max-width: 480px;
+  max-height: 480px;
   border-radius: 12px;
   overflow: hidden;
   margin-bottom: 1rem;
