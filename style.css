@@ -58,13 +58,13 @@ body {
   flex-shrink: 0;
 }
 .plus-icon {
-  width: 24px;
-  height: 24px;
+  width: 10px;
+  height: 10px;
   fill: #fff;
 }
 .spotify-logo {
   width: 30px;
-  height: 30px;
+  height: 18px;
   fill: #fff;
   animation: breathe 4s ease-in-out infinite;
 }
