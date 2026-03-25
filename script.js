@@ -22,6 +22,17 @@ const statusIconEl = document.getElementById('status-icon');
 let pollInterval = null;
 let lastImageUrl = ''; // 记录上一张封面 URL，避免重复提取
 
+// 设置 favicon
+function setFavicon(url) {
+  let link = document.querySelector('link[rel="icon"]');
+  if (!link) {
+    link = document.createElement('link');
+    link.rel = 'icon';
+    document.head.appendChild(link);
+  }
+  link.href = url;
+}
+
 async function fetchPlaylistInfo() {
   try {
     const url = `https://open.spotify.com/oembed?url=spotify:playlist:${PLAYLIST_ID}&format=json`;
@@ -34,6 +45,8 @@ async function fetchPlaylistInfo() {
     if (data.thumbnail_url) {
       playlistCoverEl.src = data.thumbnail_url;
       playlistCoverEl.alt = `${data.title} cover`;
+      // 设置 favicon 为歌单封面
+      setFavicon(data.thumbnail_url);
     }
     playlistLinkEl.href = PLAYLIST_LINK_BASE + PLAYLIST_ID;
   } catch (e) {
@@ -201,21 +214,24 @@ function updateUI(track) {
       extractDominantColor(imgUrl).then(color => {
         if (color) applyGradientBackground(color);
       });
+      // 更新 favicon 为当前封面
+      setFavicon(imgUrl);
     }
     
     albumCover.src = imgUrl;
     albumCover.alt = `${track.album['#text']} cover`;
   } else {
     // fallback: 使用歌单封面
-    albumCover.src = playlistCoverEl.src;
-    albumCover.alt = `${track.album['#text']} cover (fallback)`;
-    // 歌单封面也提取颜色（如果还没设过）
-    if (playlistCoverEl.src && playlistCoverEl.src !== lastImageUrl) {
-      lastImageUrl = playlistCoverEl.src;
-      extractDominantColor(playlistCoverEl.src).then(color => {
+    const fallbackUrl = playlistCoverEl.src;
+    if (fallbackUrl && fallbackUrl !== lastImageUrl) {
+      lastImageUrl = fallbackUrl;
+      extractDominantColor(fallbackUrl).then(color => {
         if (color) applyGradientBackground(color);
       });
+      setFavicon(fallbackUrl);
     }
+    albumCover.src = fallbackUrl;
+    albumCover.alt = `${track.album['#text']} cover (fallback)`;
   }
 
   const isNowPlaying = track['@attr']?.nowplaying === 'true';
