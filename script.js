@@ -73,32 +73,31 @@ async function extractDominantColor(imgUrl) {
         ctx.drawImage(img, 0, 0, 50, 50);
         const data = ctx.getImageData(0, 0, 50, 50).data;
 
-        // 找高饱和度的点，过滤灰度/黑色
-        let r = 0, g = 0, b = 0;
-        let count = 0;
+        // 找饱和度最高的像素（忽略太暗的）
+        let maxSat = -1;
+        let bestR, bestG, bestB;
         for (let i = 0; i < data.length; i += 4) {
-          const ri = data[i], gi = data[i+1], bi = data[i+2];
-          const max = Math.max(ri, gi, bi);
-          const min = Math.min(ri, gi, bi);
-          if (max === 0) continue; // 纯黑跳过
-          const sat = (max - min) / max; // 饱和度 (0-1)
-          if (sat < 0.3) continue; // 饱和度太低跳过
-          r += ri; g += gi; b += bi;
-          count++;
+          const r = data[i], g = data[i+1], b = data[i+2];
+          const max = Math.max(r, g, b);
+          if (max < 40) continue; // 忽略太暗的颜色
+          const sat = (max - Math.min(r, g, b)) / max; // 饱和度
+          if (sat > maxSat) {
+            maxSat = sat;
+            bestR = r; bestG = g; bestB = b;
+          }
         }
 
-        if (count === 0) {
-          // 没有高饱和度颜色，用平均色
+        if (bestR !== undefined) {
+          resolve({ r: bestR, g: bestG, b: bestB });
+        } else {
+          // 回退：取平均色
+          let r = 0, g = 0, b = 0, count = 0;
           for (let i = 0; i < data.length; i += 4) {
             r += data[i]; g += data[i+1]; b += data[i+2];
+            count++;
           }
-          count = data.length / 4;
+          resolve({ r: Math.floor(r/count), g: Math.floor(g/count), b: Math.floor(b/count) });
         }
-
-        r = Math.floor(r / count);
-        g = Math.floor(g / count);
-        b = Math.floor(b / count);
-        resolve({ r, g, b });
       } catch (e) {
         console.warn('Color extraction failed:', e);
         resolve(null);

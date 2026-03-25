@@ -56,6 +56,7 @@ body {
   width: 24px;
   height: 24px;
   flex-shrink: 0;
+  fill: #1DB954; /* Spotify 官方绿 */
 }
 .playlist-info h2 {
   font-size: 0.9rem;
