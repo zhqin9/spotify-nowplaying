@@ -63,23 +63,38 @@ function showPlayer() {
 async function extractDominantColor(imgUrl) {
   return new Promise((resolve) => {
     const img = new Image();
-    img.crossOrigin = 'anonymous'; // 避免跨域问题
+    img.crossOrigin = 'anonymous';
     img.onload = () => {
       try {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
-        // 缩小尺寸加快处理
         canvas.width = 50;
         canvas.height = 50;
         ctx.drawImage(img, 0, 0, 50, 50);
         const data = ctx.getImageData(0, 0, 50, 50).data;
-        let r = 0, g = 0, b = 0, count = 0;
+
+        // 找高饱和度的点，过滤灰度/黑色
+        let r = 0, g = 0, b = 0;
+        let count = 0;
         for (let i = 0; i < data.length; i += 4) {
-          r += data[i];
-          g += data[i + 1];
-          b += data[i + 2];
+          const ri = data[i], gi = data[i+1], bi = data[i+2];
+          const max = Math.max(ri, gi, bi);
+          const min = Math.min(ri, gi, bi);
+          if (max === 0) continue; // 纯黑跳过
+          const sat = (max - min) / max; // 饱和度 (0-1)
+          if (sat < 0.3) continue; // 饱和度太低跳过
+          r += ri; g += gi; b += bi;
           count++;
         }
+
+        if (count === 0) {
+          // 没有高饱和度颜色，用平均色
+          for (let i = 0; i < data.length; i += 4) {
+            r += data[i]; g += data[i+1]; b += data[i+2];
+          }
+          count = data.length / 4;
+        }
+
         r = Math.floor(r / count);
         g = Math.floor(g / count);
         b = Math.floor(b / count);

@@ -49,11 +49,13 @@ body {
 .title-row {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: space-between; /* 标题靠左，Logo 靠右 */
+  width: 100%;
 }
 .spotify-logo {
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
 }
 .playlist-info h2 {
   font-size: 0.9rem;
@@ -61,7 +63,7 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 200px;
+  max-width: calc(100% - 32px); /* 为 Logo 留出空间 */
 }
 .playlist-info p {
   font-size: 0.8rem;
