@@ -176,6 +176,13 @@ function updateUI(track) {
     // 强制替换尺寸为 990x990（高清）
     imgUrl = imgUrl.replace(/\/\d+x\d+\//, '/990x990/');
     
+    // 检测是否为 Last.fm 默认占位图（没有专辑封面时返回）
+    const isPlaceholder = imgUrl.includes('2a96cbd8b46e442fc41c2b86b821562f');
+    if (isPlaceholder) {
+      // 使用歌单封面
+      imgUrl = playlistCoverEl.src;
+    }
+    
     // 提取主色并更新背景（仅当封面变化时）
     if (imgUrl !== lastImageUrl) {
       lastImageUrl = imgUrl;
@@ -185,7 +192,7 @@ function updateUI(track) {
     }
     
     albumCover.src = imgUrl;
-    albumCover.alt = `${track.album['#text']} cover (999x999)`;
+    albumCover.alt = `${track.album['#text']} cover`;
   } else {
     // fallback: 使用歌单封面
     albumCover.src = playlistCoverEl.src;
