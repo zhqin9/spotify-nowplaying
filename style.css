@@ -56,7 +56,8 @@ body {
   width: 24px;
   height: 24px;
   flex-shrink: 0;
-  fill: #1DB954; /* Spotify 官方绿 */
+  fill: #1DB954;
+  margin-left: auto; /* 推到最右边 */
 }
 .playlist-info h2 {
   font-size: 0.9rem;
