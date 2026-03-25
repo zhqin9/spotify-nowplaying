@@ -108,16 +108,16 @@ async function extractDominantColor(imgUrl) {
   });
 }
 
-// 根据主色生成平滑渐变背景（从上到下：多层次过渡）
+// 根据主色生成平滑渐变背景（整体更亮）
 function applyGradientBackground({ r, g, b }) {
-  // 生成两个中间暗色，避免突变
-  const midR = Math.floor(r * 0.8);
-  const midG = Math.floor(g * 0.8);
-  const midB = Math.floor(b * 0.8);
-  const darkR = Math.floor(r * 0.6);  // 只变暗到 60% 亮度
-  const darkG = Math.floor(g * 0.6);
-  const darkB = Math.floor(b * 0.6);
-  // 三层渐变：主色 → 中度暗 → 轻微暗
+  // 保持主色不变，后续层次轻微变暗（80% 和 90% 亮度）以保持明亮
+  const midR = Math.floor(r * 0.9);
+  const midG = Math.floor(g * 0.9);
+  const midB = Math.floor(b * 0.9);
+  const darkR = Math.floor(r * 0.8);  // 最暗也有 80% 亮度
+  const darkG = Math.floor(g * 0.8);
+  const darkB = Math.floor(b * 0.8);
+  // 三层渐变：主色 → 90%亮度 → 80%亮度（整体明亮）
   document.body.style.background = `linear-gradient(180deg, 
     rgb(${r},${g},${b}) 0%,
     rgb(${midR},${midG},${midB}) 60%,
