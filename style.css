@@ -91,7 +91,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: auto;
+  margin-top: 15vh; /* 向上移动 */
   margin-bottom: auto;
   width: fit-content;
   max-width: 90vw;
