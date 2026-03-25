@@ -20,6 +20,7 @@ const playlistAuthorEl = document.getElementById('playlist-author');
 const statusIconEl = document.getElementById('status-icon');
 
 let pollInterval = null;
+let lastImageUrl = ''; // 记录上一张封面 URL，避免重复提取
 
 async function fetchPlaylistInfo() {
   try {
@@ -58,6 +59,52 @@ function showPlayer() {
   playerEl.classList.remove('hidden');
 }
 
+// 从图片 URL 提取主色调（返回 {r,g,b} 或 null）
+async function extractDominantColor(imgUrl) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous'; // 避免跨域问题
+    img.onload = () => {
+      try {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        // 缩小尺寸加快处理
+        canvas.width = 50;
+        canvas.height = 50;
+        ctx.drawImage(img, 0, 0, 50, 50);
+        const data = ctx.getImageData(0, 0, 50, 50).data;
+        let r = 0, g = 0, b = 0, count = 0;
+        for (let i = 0; i < data.length; i += 4) {
+          r += data[i];
+          g += data[i + 1];
+          b += data[i + 2];
+          count++;
+        }
+        r = Math.floor(r / count);
+        g = Math.floor(g / count);
+        b = Math.floor(b / count);
+        resolve({ r, g, b });
+      } catch (e) {
+        console.warn('Color extraction failed:', e);
+        resolve(null);
+      }
+    };
+    img.onerror = () => resolve(null);
+    img.src = imgUrl;
+  });
+}
+
+// 根据主色生成渐变背景
+function applyGradientBackground({ r, g, b }) {
+  // 生成暗色版本（降低亮度）
+  const darkR = Math.floor(r * 0.2);
+  const darkG = Math.floor(g * 0.2);
+  const darkB = Math.floor(b * 0.2);
+  // 渐变：从暗色到主色
+  document.body.style.background = `linear-gradient(135deg, rgb(${darkR},${darkG},${darkB}) 0%, rgb(${r},${g},${b}) 100%)`;
+  document.body.style.transition = 'background 0.8s ease';
+}
+
 function updateUI(track) {
   if (!track) {
     statusEl.textContent = '当前未播放';
@@ -84,12 +131,28 @@ function updateUI(track) {
     let imgUrl = img['#text'];
     // 强制替换尺寸为 999x999（高清）
     imgUrl = imgUrl.replace(/\/\d+x\d+\//, '/999x999/');
+    
+    // 提取主色并更新背景（仅当封面变化时）
+    if (imgUrl !== lastImageUrl) {
+      lastImageUrl = imgUrl;
+      extractDominantColor(imgUrl).then(color => {
+        if (color) applyGradientBackground(color);
+      });
+    }
+    
     albumCover.src = imgUrl;
     albumCover.alt = `${track.album['#text']} cover (999x999)`;
   } else {
     // fallback: 使用歌单封面
     albumCover.src = playlistCoverEl.src;
     albumCover.alt = `${track.album['#text']} cover (fallback)`;
+    // 歌单封面也提取颜色（如果还没设过）
+    if (playlistCoverEl.src && playlistCoverEl.src !== lastImageUrl) {
+      lastImageUrl = playlistCoverEl.src;
+      extractDominantColor(playlistCoverEl.src).then(color => {
+        if (color) applyGradientBackground(color);
+      });
+    }
   }
 
   const isNowPlaying = track['@attr']?.nowplaying === 'true';
