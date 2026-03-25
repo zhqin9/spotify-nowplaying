@@ -201,8 +201,8 @@ function updateUI(track) {
               images[0];
   if (img) {
     let imgUrl = img['#text'];
-    // 强制替换尺寸为 999x999（高清）
-    imgUrl = imgUrl.replace(/\/\d+x\d+\//, '/999x999/');
+    // 强制替换尺寸为 990x990（高清）
+    imgUrl = imgUrl.replace(/\/\d+x\d+\//, '/990x990/');
     
     // 提取主色并更新背景（仅当封面变化时）
     if (imgUrl !== lastImageUrl) {
