@@ -22,25 +22,30 @@
 </head>
 <body>
   <div class="container">
-    <a id="playlist-link" href="{{OG_URL}}" target="_blank" rel="noopener noreferrer" class="playlist-header">
-      <img id="playlist-cover" src="{{COVER}}" alt="Playlist cover">
-      <div class="playlist-info">
-        <h2 id="playlist-title">{{TITLE}}</h2>
-        <p id="playlist-author">{{AUTHOR}}</p>
-      </div>
-    </a>
+    <div class="content-wrapper">
+      <!-- 左：歌单信息 -->
+      <a id="playlist-link" href="{{OG_URL}}" target="_blank" rel="noopener noreferrer" class="playlist-header">
+        <img id="playlist-cover" src="{{COVER}}" alt="Playlist cover">
+        <div class="playlist-info">
+          <h2 id="playlist-title">{{TITLE}}</h2>
+          <p id="playlist-author">{{AUTHOR}}</p>
+        </div>
+      </a>
 
-    <div id="status">加载中...</div>
-    <div id="player" class="player hidden">
-      <div class="album-art">
-        <img id="album-cover" src="" alt="Album cover">
-      </div>
-      <div class="info">
-        <h2 id="track-name">—</h2>
-        <p id="artist-name">—</p>
-        <p id="album-name">—</p>
+      <!-- 右：当前播放 -->
+      <div id="player" class="player hidden">
+        <div class="album-art">
+          <img id="album-cover" src="" alt="Album cover">
+        </div>
+        <div class="info">
+          <h2 id="track-name">—</h2>
+          <p id="artist-name">—</p>
+          <p id="album-name">—</p>
+        </div>
       </div>
     </div>
+
+    <div id="status">加载中...</div>
     <div id="error" class="error hidden"></div>
   </div>
 
