@@ -139,20 +139,41 @@ async function extractDominantColor(imgUrl) {
   });
 }
 
-// 根据主色生成平滑渐变背景（整体更亮）
-function applyGradientBackground({ r, g, b }) {
-  // 保持主色不变，后续层次轻微变暗（80% 和 90% 亮度）以保持明亮
-  const midR = Math.floor(r * 0.9);
-  const midG = Math.floor(g * 0.9);
-  const midB = Math.floor(b * 0.9);
-  const darkR = Math.floor(r * 0.8);  // 最暗也有 80% 亮度
-  const darkG = Math.floor(g * 0.8);
-  const darkB = Math.floor(b * 0.8);
-  // 三层渐变：主色 → 90%亮度 → 80%亮度（整体明亮）
+// 将颜色亮度标准化到中等范围（150-180）
+function normalizeBrightness({ r, g, b }) {
+  // 计算亮度（加权平均，符合人眼感知）
+  const brightness = 0.299 * r + 0.587 * g + 0.114 * b;
+  const target = 165; // 中等亮度，约 65%
+  if (brightness < 100) {
+    // 太暗，提升亮度
+    const factor = target / brightness;
+    return {
+      r: Math.min(255, Math.floor(r * factor)),
+      g: Math.min(255, Math.floor(g * factor)),
+      b: Math.min(255, Math.floor(b * factor))
+    };
+  } else if (brightness > 200) {
+    // 太亮，降低亮度
+    const factor = target / brightness;
+    return {
+      r: Math.floor(r * factor),
+      g: Math.floor(g * factor),
+      b: Math.floor(b * factor)
+    };
+  }
+  // 亮度适中，保持原样
+  return { r, g, b };
+}
+
+// 根据主色生成平滑渐变背景（亮度适中）
+function applyGradientBackground(color) {
+  const base = normalizeBrightness(color);
+  const { r, g, b } = base;
+  // 渐变：轻微变暗，保持层次
   document.body.style.background = `linear-gradient(180deg, 
     rgb(${r},${g},${b}) 0%,
-    rgb(${midR},${midG},${midB}) 60%,
-    rgb(${darkR},${darkG},${darkB}) 100%)`;
+    rgb(${Math.floor(r*0.95)},${Math.floor(g*0.95)},${Math.floor(b*0.95)}) 60%,
+    rgb(${Math.floor(r*0.9)},${Math.floor(g*0.9)},${Math.floor(b*0.9)}) 100%)`;
   document.body.style.transition = 'background 0.8s ease';
 }
 
