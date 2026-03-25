@@ -65,9 +65,9 @@ body {
 }
 .spotify-logo {
   width: 30px;
-  height: 30px;
+  height: 18px;
   fill: #fff;
-  animation: breathe 4s ease-in-out infinite; /* 慢一点 */
+  animation: breathe 6s ease-in-out infinite; /* 慢一点 */
 }
 @keyframes breathe {
   0%, 100% { fill: #fff; }
