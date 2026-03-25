@@ -164,7 +164,7 @@ body {
   .container { max-width: 100%; padding: 0.5rem; }
   .playlist-header img { width: 40px; height: 40px; }
   .player { max-width: 90vw; }
-  .album-art { width: 200px; height: 200px; border-radius: 8px; }
+  .album-art { border-radius: 8px; }
   .info h2 { font-size: 1rem; }
   .info p { font-size: 0.85rem; }
 }
