@@ -115,6 +115,7 @@ body {
   text-overflow: ellipsis;
   text-align: center;
   width: 100%;
+  max-width: 90vw; /* 跟随封面宽度 */
 }
 .info p {
   color: #fff;  /* 歌手名保持白色，不减淡 */
