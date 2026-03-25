@@ -46,22 +46,27 @@ body {
   object-fit: cover;
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
-.playlist-header {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  width: 100%;
-}
 .playlist-info {
   flex: 1;
   min-width: 0; /* 确保文本截断生效 */
 }
-.spotify-logo {
-  width: 24px;
-  height: 24px;
-  flex-shrink: 0;
-  fill: #1DB954;
+.live-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   margin-left: auto; /* 推到最右边 */
+  flex-shrink: 0;
+}
+.on-air-text {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+.spotify-logo {
+  width: 18px;
+  height: 18px;
+  fill: #fff; /* 白色 */
 }
 .playlist-info h2 {
   font-size: 0.9rem;
@@ -72,7 +77,7 @@ body {
 }
 .playlist-info p {
   font-size: 0.8rem;
-  color: #e0e0e0;  /* 提亮 */
+  color: #e0e0e0;
 }
 
 /* 当前播放 - 去除背景和圆角，封面方形+阴影 */
