@@ -70,7 +70,7 @@ body {
 }
 @keyframes breathe {
   0%, 100% { fill: #fff; }
-  50% { fill: #1DB954; }
+  40%, 60% { fill: #1DB954; }
 }
 .playlist-info h2 {
   font-size: 0.9rem;
