@@ -161,9 +161,9 @@ body {
 
 /* 小屏幕调整 */
 @media (max-width: 480px) {
-  .container { max-width: 100%; padding: 0.5rem; }
+  .container { max-width: 100%; }
   .playlist-header img { width: 40px; height: 40px; }
-  .player { max-width: 90vw; }
+  .player { max-width: 90vw; margin-top: 0vh; }
   .album-art { border-radius: 8px; }
   .info h2 { font-size: 1rem; }
   .info p { font-size: 0.85rem; }
