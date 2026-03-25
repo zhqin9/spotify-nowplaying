@@ -73,17 +73,48 @@ async function extractDominantColor(imgUrl) {
         ctx.drawImage(img, 0, 0, 50, 50);
         const data = ctx.getImageData(0, 0, 50, 50).data;
 
-        // 找饱和度最高的像素（忽略太暗的）
-        let maxSat = -1;
         let bestR, bestG, bestB;
+        let maxSat = -1;
+        let hasRed = false;
+
+        // 第一遍：找红色优先
         for (let i = 0; i < data.length; i += 4) {
           const r = data[i], g = data[i+1], b = data[i+2];
           const max = Math.max(r, g, b);
-          if (max < 40) continue; // 忽略太暗的颜色
-          const sat = (max - Math.min(r, g, b)) / max; // 饱和度
-          if (sat > maxSat) {
-            maxSat = sat;
-            bestR = r; bestG = g; bestB = b;
+          if (max < 40) continue;
+          const min = Math.min(r, g, b);
+          const sat = (max - min) / max;
+          
+          // 判断是否是红色/红橙色（r 显著高于 g 且 r > b）
+          const isReddish = r > 100 && r > g * 1.2 && r > b;
+          
+          if (isReddish && sat > 0.3) {
+            // 找到红色，记录其饱和度
+            if (sat > maxSat) {
+              maxSat = sat;
+              bestR = r; bestG = g; bestB = b;
+              hasRed = true;
+            }
+          }
+        }
+
+        // 如果没找到红色或红色饱和太低，再找全局最高饱和度（避开黄色）
+        if (!hasRed) {
+          maxSat = -1;
+          for (let i = 0; i < data.length; i += 4) {
+            const r = data[i], g = data[i+1], b = data[i+2];
+            const max = Math.max(r, g, b);
+            if (max < 40) continue;
+            const min = Math.min(r, g, b);
+            const sat = (max - min) / max;
+            
+            // 避开黄色：黄色通常 r≈g > b，且 r 和 g 都很高
+            const isYellow = r > 150 && g > 150 && b < 100 && Math.abs(r - g) < 30;
+            
+            if (!isYellow && sat > maxSat) {
+              maxSat = sat;
+              bestR = r; bestG = g; bestB = b;
+            }
           }
         }
 
