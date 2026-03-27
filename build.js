@@ -3,7 +3,9 @@ const path = require('path');
 const https = require('https');
 
 // 配置
-const PLAYLIST_ID = '44Xq0ZjwweqahmogY3gM5M';
+const PLAYLIST_ID = '75OLnwx0I1L2RKnHItDz3R';
+// 完整邀请链接
+const PLAYLIST_URL = 'https://open.spotify.com/playlist/75OLnwx0I1L2RKnHItDz3R?si=5b566a7afa824a22&pt=94c93bc8c9fcbd6c1c5f2b58261a0fe4';
 const TEMPLATE_PATH = path.join(__dirname, 'index.template.html');
 const OUTPUT_PATH = path.join(__dirname, 'index.html');
 
@@ -40,7 +42,7 @@ function renderTemplate(template, info) {
     .replace(/\{\{OG_TITLE\}\}/g, info.title)
     .replace(/\{\{OG_DESCRIPTION\}\}/g, `Listen to ${info.title} by ${info.author_name} on Spotify.`)
     .replace(/\{\{OG_IMAGE\}\}/g, info.thumbnail_url)
-    .replace(/\{\{OG_URL\}\}/g, `https://open.spotify.com/playlist/${PLAYLIST_ID}`)
+    .replace(/\{\{OG_URL\}\}/g, PLAYLIST_URL)  // 使用完整邀请链接
     .replace(/\{\{TITLE\}\}/g, info.title)
     .replace(/\{\{AUTHOR\}\}/g, info.author_name)
     .replace(/\{\{COVER\}\}/g, info.thumbnail_url);
