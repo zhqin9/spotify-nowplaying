@@ -82,11 +82,11 @@ async function fetchPlaylist(playlistId, token) {
     });
     if (!resp.ok) {
       const text = await resp.text();
-      console.error('❌ Spotify API error:', resp.status, text);
+      console.error(`❌ Spotify API error: ${resp.status}`, resp.statusText, text);
       return null;
     }
     const data = await resp.json();
-
+    console.log('✅ Playlist data received:', { title: data.name, trackCount: data.tracks?.total });
     return {
       title: data.name,
       author: data.owner?.display_name || 'Spotify',
