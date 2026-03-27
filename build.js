@@ -38,15 +38,18 @@ function fetchPlaylistInfo() {
 
 // 替换模板占位符
 function renderTemplate(template, info) {
+  const title = info.title || '歌单';
+  const author = info.author_name || 'Spotify';
+  const thumbnail = info.thumbnail_url || '';
   const result = template
-    .replace(/\{\{OG_TITLE\}\}/g, info.title)
-    .replace(/\{\{OG_DESCRIPTION\}\}/g, `Listen to ${info.title} by ${info.author_name} on Spotify.`)
-    .replace(/\{\{OG_IMAGE\}\}/g, info.thumbnail_url)
+    .replace(/\{\{OG_TITLE\}\}/g, title)
+    .replace(/\{\{OG_DESCRIPTION\}\}/g, `Listen to ${title} by ${author} on Spotify.`)
+    .replace(/\{\{OG_IMAGE\}\}/g, thumbnail)
     .replace(/\{\{OG_URL\}\}/g, PLAYLIST_URL)  // 使用完整邀请链接
-    .replace(/\{\{TITLE\}\}/g, info.title)
-    .replace(/\{\{AUTHOR\}\}/g, info.author_name)
-    .replace(/\{\{COVER\}\}/g, info.thumbnail_url);
-  console.log('Replaced COVER with:', info.thumbnail_url);
+    .replace(/\{\{TITLE\}\}/g, title)
+    .replace(/\{\{AUTHOR\}\}/g, author)
+    .replace(/\{\{COVER\}\}/g, thumbnail);
+  console.log('Replaced COVER with:', thumbnail);
   return result;
 }
 
