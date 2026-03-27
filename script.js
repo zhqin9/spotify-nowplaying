@@ -22,7 +22,7 @@ const statusIconEl = document.getElementById('status-icon');
 let pollInterval = null;
 let lastImageUrl = ''; // 记录上一张封面 URL，避免重复提取
 
-// 设置 favicon
+// 设置 favicon（使用歌单封面，已在构建时注入）
 function setFavicon(url) {
   let link = document.querySelector('link[rel="icon"]');
   if (!link) {
@@ -31,31 +31,6 @@ function setFavicon(url) {
     document.head.appendChild(link);
   }
   link.href = url;
-}
-
-async function fetchPlaylistInfo() {
-  try {
-    const url = `https://open.spotify.com/oembed?url=spotify:playlist:${PLAYLIST_ID}&format=json`;
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`Failed to load playlist info (${res.status})`);
-    const data = await res.json();
-    document.title = data.title + ' - Now Playing';
-    playlistTitleEl.textContent = data.title;
-    playlistAuthorEl.textContent = data.author_name;
-    if (data.thumbnail_url) {
-      playlistCoverEl.src = data.thumbnail_url;
-      playlistCoverEl.alt = `${data.title} cover`;
-      // 设置 favicon 为歌单封面
-      setFavicon(data.thumbnail_url);
-    }
-    playlistLinkEl.href = PLAYLIST_LINK_BASE + PLAYLIST_ID;
-  } catch (e) {
-    console.warn('Playlist info fetch failed:', e);
-    document.title = 'Now Playing';
-    playlistTitleEl.textContent = '歌单';
-    playlistAuthorEl.textContent = 'Spotify';
-    playlistLinkEl.href = PLAYLIST_LINK_BASE + PLAYLIST_ID;
-  }
 }
 
 function showError(msg) {
@@ -257,5 +232,9 @@ function startPolling() {
 }
 
 window.addEventListener('load', () => {
-  fetchPlaylistInfo().then(startPolling);
+  // 初始化 favicon（歌单封面已由构建注入）
+  if (playlistCoverEl.src) {
+    setFavicon(playlistCoverEl.src);
+  }
+  startPolling();
 });
