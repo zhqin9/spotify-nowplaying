@@ -236,5 +236,23 @@ window.addEventListener('load', () => {
   if (playlistCoverEl.src) {
     setFavicon(playlistCoverEl.src);
   }
+  // 获取歌单详细信息（曲目数量等）
+  fetchPlaylistDetails();
   startPolling();
 });
+
+// 从后端 API 获取歌单详情
+async function fetchPlaylistDetails() {
+  try {
+    const res = await fetch('/api/playlist');
+    if (!res.ok) throw new Error(`Failed to fetch playlist details: ${res.status}`);
+    const data = await res.json();
+    const trackCountEl = document.getElementById('playlist-track-count');
+    if (trackCountEl && data.trackCount) {
+      trackCountEl.textContent = `• ${data.trackCount} 首歌曲`;
+    }
+  } catch (e) {
+    console.warn('Playlist details fetch failed:', e);
+    // 静默失败，不影响主流程
+  }
+}
