@@ -50,7 +50,8 @@ export async function onRequest(context) {
 
 // Client Credentials 获取 token
 async function getAccessToken(clientId, clientSecret) {
-  const credentials = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
+  // Cloudflare Workers 中 Buffer 不可用，使用 btoa
+  const credentials = btoa(`${clientId}:${clientSecret}`);
   try {
     const resp = await fetch('https://accounts.spotify.com/api/token', {
       method: 'POST',
