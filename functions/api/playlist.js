@@ -10,6 +10,8 @@ export async function onRequest(context) {
   const clientSecret = env.SPOTIFY_CLIENT_SECRET;
   const playlistId = '75OLnwx0I1L2RKnHItDz3R'; // 你的歌单 ID
 
+  console.log('🔍 Env vars:', { hasClientId: !!clientId, hasClientSecret: !!clientSecret });
+
   if (!clientId || !clientSecret) {
     const err = 'Missing Spotify credentials (SPOTIFY_CLIENT_ID or SPOTIFY_CLIENT_SECRET not set)';
     console.error('❌', err);
@@ -50,7 +52,6 @@ export async function onRequest(context) {
 
 // Client Credentials 获取 token
 async function getAccessToken(clientId, clientSecret) {
-  // Cloudflare Workers 中 Buffer 不可用，使用 btoa
   const credentials = btoa(`${clientId}:${clientSecret}`);
   try {
     const resp = await fetch('https://accounts.spotify.com/api/token', {
