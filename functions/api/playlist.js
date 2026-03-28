@@ -5,7 +5,9 @@
  */
 
 export async function onRequest(context) {
+  console.log('🚀 onRequest called');
   const { env } = context;
+  console.log('🔍 context.env keys:', Object.keys(env));
   const clientId = env.SPOTIFY_CLIENT_ID;
   const clientSecret = env.SPOTIFY_CLIENT_SECRET;
   const playlistId = '75OLnwx0I1L2RKnHItDz3R'; // 你的歌单 ID
