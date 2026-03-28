@@ -1,8 +1,18 @@
 export async function onRequest(context) {
-  console.log('🔍 context.env:', context.env);
+  const { env } = context;
+  const clientId = env.SPOTIFY_CLIENT_ID;
+  const clientSecret = env.SPOTIFY_CLIENT_SECRET;
+  
+  console.log('🔍 [env-test] SPOTIFY_CLIENT_ID present:', !!clientId);
+  console.log('🔍 [env-test] SPOTIFY_CLIENT_SECRET present:', !!clientSecret);
+  
   return new Response(JSON.stringify({
-    hasClientId: !!context.env.SPOTIFY_CLIENT_ID,
-    hasClientSecret: !!context.env.SPOTIFY_CLIENT_SECRET,
-    envKeys: Object.keys(context.env)
-  }));
+    hasClientId: !!clientId,
+    hasClientSecret: !!clientSecret,
+    clientIdPreview: clientId ? clientId.slice(0, 8) + '...' : null,
+    clientSecretPreview: clientSecret ? clientSecret.slice(0, 8) + '...' : null,
+    allKeys: Object.keys(env)
+  }, null, 2), {
+    headers: { 'Content-Type': 'application/json' }
+  });
 }
