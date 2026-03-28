@@ -52,7 +52,8 @@ export async function onRequest(context) {
 
 // Client Credentials 获取 token
 async function getAccessToken(clientId, clientSecret) {
-  const credentials = btoa(`${clientId}:${clientSecret}`);
+  // 确保 ASCII 编码（应对潜在的非 ASCII 字符）
+  const credentials = btoa(unescape(encodeURIComponent(`${clientId}:${clientSecret}`)));
   try {
     const resp = await fetch('https://accounts.spotify.com/api/token', {
       method: 'POST',
