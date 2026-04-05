@@ -1,3 +1,7 @@
+const MANUAL_TITLE = '你的歌单标题';
+const MANUAL_AUTHOR = '作者名';
+const MANUAL_THUMBNAIL = '封面图 URL';
+
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
