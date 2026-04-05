@@ -5,7 +5,7 @@ const https = require('https');
 // 配置
 const PLAYLIST_ID = '75OLnwx0I1L2RKnHItDz3R';
 // 完整邀请链接
-const PLAYLIST_URL = 'https://open.spotify.com/playlist/75OLnwx0I1L2RKnHItDz3R?si=5b566a7afa824a22&pt=94c93bc8c9fcbd6c1c5f2b58261a0fe4';
+const PLAYLIST_URL = 'https://open.spotify.com/playlist/75OLnwx0I1L2RKnHItDz3R?si=b0432e74b7f9413b&pt=c635292ab17054fcc94e71da17e8e8e3';
 const TEMPLATE_PATH = path.join(__dirname, 'index.template.html');
 const OUTPUT_PATH = path.join(__dirname, 'index.html');
 
