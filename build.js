@@ -1,15 +1,11 @@
-const MANUAL_TITLE = '你的歌单标题';
-const MANUAL_AUTHOR = '作者名';
-const MANUAL_THUMBNAIL = '封面图 URL';
-
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
 
 // 配置
-const PLAYLIST_ID = '75OLnwx0I1L2RKnHItDz3R';
+const PLAYLIST_ID = '1oAInQP7NqCgs69n8KsxZN';
 // 完整邀请链接（OG 使用）
-const PLAYLIST_URL = 'https://open.spotify.com/playlist/75OLnwx0I1L2RKnHItDz3R?si=9013196dfe444aa8&pt=e9a44114a87f46c9fb58215b41de1553';
+const PLAYLIST_URL = 'https://open.spotify.com/playlist/1oAInQP7NqCgs69n8KsxZN?si=53aeb3109afe4593&pt=8b3760985968572e8b1dd27ee6fccab5';
 const TEMPLATE_PATH = path.join(__dirname, 'index.template.html');
 const OUTPUT_PATH = path.join(__dirname, 'index.html');
 
